@@ -78,6 +78,7 @@ void plot_analysis(TString indir="tagger80/", std::string name="CMS")
 
   histotal.GetXaxis()->SetTitle("Higgs boson mass [GeV]");
   histotal.GetYaxis()->SetTitle("events / GeV");
+  histotal.GetYaxis()->SetTitleOffset(1.15);
   tempfunc.DrawCopy("lsame");
   leg.SetFillStyle(0);
   leg.SetBorderSize(0);
