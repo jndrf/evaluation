@@ -1,2 +1,2 @@
 # evaluation
-Macros for evaluating the H->bbqq analysis
+Macros for evaluating the H->bbqq analysis.
