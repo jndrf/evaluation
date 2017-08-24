@@ -5,8 +5,6 @@
 #include "tools.C"
 
 // Histograms and other stuff that needs to live when the main function goes out of scope
-THStack histotal("histotal", "");//, NBINS, LOWER, UPPER);
-TLegend leg(0.15, 0.7, 0.35, 0.9);
 TCanvas cv("cv", "Four Jet Channel", 1000, 707); 
 
 TLatex field(0.62, .86, "-_-");
@@ -28,6 +26,9 @@ void plot_analysis(TString indir="tagger80/", std::string name="CMS")
   gStyle->SetLegendBorderSize(0);
 
   //make histograms
+  THStack histotal("histotal", "");//, NBINS, LOWER, UPPER);
+  TLegend leg(0.15, 0.7, 0.35, 0.9);
+
   TH1D signal = tools::makeHisto("signal", tools::basepath+indir+"/Higgsstrahlung/", 193, 0, tools::cutstring(2));
   TH1D bgZZ = tools::makeHisto("bgZZ", tools::basepath+indir+"/ZZ_any/", 1300, 0, tools::cutstring(2));
   TH1D bgWW = tools::makeHisto("bgWW", tools::basepath+indir+"/WW_any/", 16000, 0, tools::cutstring(2));
