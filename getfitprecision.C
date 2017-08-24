@@ -108,7 +108,7 @@ void getfitprecision(TString indir="lep3tracker")
   TH1D result_mpv("mpv", "most probable value", 100, 122.5, 127.5);
   TH1D result_fwhm("fwhm", "fwhm", 200,0, 15);
   TH1D result_chi2_dof("chi2_dof", "#chi^{2}",200, 0, 3);
-  TH1D result_yield("yield", "signal yield", 400, 4000, 10000);
+  TH1D result_yield("yield", "signal yield", 400, 6000, 12000);
 
   std::cout << "begin smearing" << std::endl;
   //smear and fit the histogram often (100k?), store the vars in the histos.
