@@ -29,9 +29,13 @@ void plot_analysis(TString indir="tagger80/", std::string name="CMS")
   THStack histotal("histotal", "");//, NBINS, LOWER, UPPER);
   TLegend leg(0.15, 0.7, 0.35, 0.9);
 
+  std::cout << "signal" << std::endl;
   TH1D signal = tools::makeHisto("signal", tools::basepath+indir+"/Higgsstrahlung/", 193, 0, tools::cutstring(2));
+  std::cout << "ZZ" << std::endl;
   TH1D bgZZ = tools::makeHisto("bgZZ", tools::basepath+indir+"/ZZ_any/", 1300, 0, tools::cutstring(2));
+  std::cout << "WW" << std::endl;
   TH1D bgWW = tools::makeHisto("bgWW", tools::basepath+indir+"/WW_any/", 16000, 0, tools::cutstring(2));
+  std::cout << "qq" << std::endl;
   TH1D bgqqbar = tools::makeHisto("bgqqbar", tools::basepath+indir+"/Zgm_qq/", 50000, 0, tools::cutstring(2));
 
   cv.Clear();

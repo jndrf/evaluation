@@ -106,7 +106,7 @@ void getfitprecision(TString indir="lep3tracker")
 
   //Create Histograms to store every interesting variable
   TH1D result_mpv("mpv", "most probable value", 100, 122.5, 127.5);
-  TH1D result_fwhm("fwhm", "fwhm", 200,0, 15);
+  TH1D result_fwhm("fwhm", "fwhm", 400,0, 30);
   TH1D result_chi2_dof("chi2_dof", "#chi^{2}",200, 0, 3);
   TH1D result_yield("yield", "signal yield", 400, 6000, 12000);
 
