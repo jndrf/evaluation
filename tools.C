@@ -6,7 +6,7 @@
 namespace tools{
 
   // Directory holding the analyses
-  std::string basepath = "/media/sf_vm-teileordner/";
+  std::string basepath = "/afs/cern.ch/user/j/jneundor/work/public/FCCSamples/";
 
   // Global vars for the histograms and the rescaling
   int NBINS = 50;
