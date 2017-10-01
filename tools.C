@@ -96,7 +96,7 @@ namespace tools{
    */
   TH1D makeHisto(TString name, TString datapath, double xsBR, unsigned long nEvents, TString cuts = "1", TString attrib="higgsmass", bool only_positive = true)
   {
-    TString treepath="heppy.analyzers.examples.zh_had.TreeProducer.TreeProducer_1/tree.root";
+    TString treepath="heppy.analyzers.examples.zh_fourjet.TreeProducer.TreeProducer_1/tree.root";
     TString totpath=datapath+treepath;
   
     TFile data(totpath);
@@ -121,7 +121,7 @@ namespace tools{
    */
   TH1D plot_jettag(std::string path, TString cuts, TString injet="hadjet", TString tag="dr", int njets=4, int bins=100, float unten=0., float oben=.5, bool normed=true)
   {
-    TString treepath="heppy.analyzers.examples.zh_had.TreeProducer.TreeProducer_1/tree.root";
+    TString treepath="heppy.analyzers.examples.zh_fourjet.TreeProducer.TreeProducer_1/tree.root";
     TFile data(path+treepath);
     TTree *tree;
     data.GetObject("events", tree);
