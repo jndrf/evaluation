@@ -53,7 +53,7 @@ void spread_comparison(TString component = "Higgsstrahlung", double xsBR = 500)
 
     cv.cd(2);
     
-    TH1D ratio = smearscale;
+    TH1D ratio = *((TH1D*) smearscale.Clone()); // ratio = smearscale creates a reference to smearscale named ratio
     ratio.Divide(&gensmear);
     ratio.SetTitle("heppy_BES over PYTHIA_BES");
     ratio.Fit("[0]");
@@ -61,7 +61,7 @@ void spread_comparison(TString component = "Higgsstrahlung", double xsBR = 500)
 
     cv.cd(3);
 
-    ratio = smearscale;
+    ratio = *((TH1D*)smearscale.Clone());
     ratio.Divide(&pure);
     ratio.SetTitle("heppy BES over no BES");
     ratio.Fit("pol(0)");
