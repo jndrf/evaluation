@@ -34,7 +34,7 @@ void marginal_cut_effs(TString indir="lep3tracker/")
   };
 
   // read data
-  TString treepath="heppy.analyzers.examples.zh_had.TreeProducer.TreeProducer_1/tree.root";
+  TString treepath="heppy.analyzers.examples.zh_fourjet.TreeProducer.TreeProducer_1/tree.root";
   TFile datsig(tools::basepath+indir+"/Higgsstrahlung/"+treepath);
   TFile datZZ(tools::basepath+indir+"/ZZ_any/"+treepath);
   TFile datWW(tools::basepath+indir+"/WW_any/"+treepath);
