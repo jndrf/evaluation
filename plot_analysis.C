@@ -84,13 +84,13 @@ void plot_analysis(TString indir="tagger80/", std::string name="CMS")
   histotal.GetXaxis()->SetTitle("Higgs boson mass [GeV]");
   histotal.GetYaxis()->SetTitle("events / GeV");
   histotal.GetYaxis()->SetTitleOffset(1.15);
-  tempfunc.DrawCopy("lsame");
   leg.SetFillStyle(0);
   leg.SetBorderSize(0);
 
   histotal.DrawClone("hist");
   field.DrawClone();
   leg.DrawClone();
+  tempfunc.DrawCopy("lsame");
   // leg.SetHeader(legtitle.c_str());
   // TLegendEntry *header = (TLegendEntry*)leg.GetListOfPrimitives().First();
   // header.SetTextAlign(22);
