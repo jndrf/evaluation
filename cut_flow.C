@@ -20,6 +20,14 @@ void cut_flow(TString source)
 		  {"2 or more bjets", "(hadjet1_b + hadjet2_b + hadjet3_b + hadjet4_b)>= 2"},
 		    {"higgs made\t", tools::tags_req + " && " + tools::candidates_base}
   };
+
+  std::vector<moep> example_cuts {
+    {"all events\t", "1"},
+      {"no lepton\t", "n_iso_leptons==0"},
+	{"4 or more jets\t", "n_jets>=4"},
+	  {".. with e>15\t", "jet1_e>=15 && jet2_e>=15 && jet3_e>=15 && jet4_e>=15"},
+	    {"2 b jets\t", "n_bjets>=2"}
+  };
   TFile data(source);
   TTree *tree;
   data.GetObject("events", tree);
