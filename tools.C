@@ -10,8 +10,8 @@ namespace tools{
 
   // Global vars for the histograms and the rescaling
   int NBINS = 50;
-  float LOWER = -9e+9;//100.;    
-  float UPPER = 9e+9;//150.;
+  float LOWER = 100.;    
+  float UPPER = 150.;
   double LUMI = 500.; //in fb
 
   /*

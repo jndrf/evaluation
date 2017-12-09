@@ -28,6 +28,9 @@ void cut_flow(TString source)
 	  {".. with e>15\t", "jet1_e>=15 && jet2_e>=15 && jet3_e>=15 && jet4_e>=15"},
 	    {"2 b jets\t", "n_bjets>=2"}
   };
+
+  tools::UPPER = 9e+9;
+  tools::LOWER = -9e+9;
   TFile data(source);
   TTree *tree;
   data.GetObject("events", tree);
@@ -37,10 +40,10 @@ void cut_flow(TString source)
 
   TString cuts = "1";
 
-  for (const auto& it : cut_map) {
+  for (const auto& it : example_cuts) {
     std::cout << it.first << " \t";
     cuts = cuts + " && "  + it.second;
-    TH1D temphist = tools::makeHisto("temp", tree, tree->GetEntries()/tools::LUMI, 0, cuts, "higgsmass", false);
+    TH1D temphist = tools::makeHisto("temp", tree, tree->GetEntries()/tools::LUMI, 0, cuts, "n_jets", false);
     current = temphist.Integral();
     std::cout << current << "\t" << current*1./previous << "\t" << current*1./n_entries << std::endl;
     previous = current;
