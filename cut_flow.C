@@ -1,12 +1,11 @@
 #include "tools.C"
 
 struct moep {
-  TString first;
-  TString second;
+  TString first;		// description text
+  TString second;		// condition passed to root
 };
 
-// extending range of histogram
-
+// pass the path to a ROOT file as argument
 void cut_flow(TString source)
 {
   std::vector<moep> cut_map {
@@ -20,7 +19,7 @@ void cut_flow(TString source)
 		  {"2 or more bjets", "(hadjet1_b + hadjet2_b + hadjet3_b + hadjet4_b)>= 2"},
 		    {"higgs made\t", tools::tags_req + " && " + tools::candidates_base}
   };
-
+  // Cuts for the zh_had example
   std::vector<moep> example_cuts {
     {"all events\t", "1"},
       {"no lepton\t", "n_iso_leptons==0"},
@@ -28,9 +27,10 @@ void cut_flow(TString source)
 	  {".. with e>15\t", "jet1_e>=15 && jet2_e>=15 && jet3_e>=15 && jet4_e>=15"},
 	    {"2 b jets\t", "n_bjets>=2"}
   };
-
+  // make the range of the histograms large so that everything is included.
   tools::UPPER = 9e+9;
   tools::LOWER = -9e+9;
+  
   TFile data(source);
   TTree *tree;
   data.GetObject("events", tree);
@@ -43,7 +43,9 @@ void cut_flow(TString source)
   for (const auto& it : example_cuts) {
     std::cout << it.first << " \t";
     cuts = cuts + " && "  + it.second;
-    TH1D temphist = tools::makeHisto("temp", tree, tree->GetEntries()/tools::LUMI, 0, cuts, "n_jets", false);
+    // create a histogram temp from TTree tree, do not rescale, take the number of events from the root file
+    // apply the cuts, plot variable higgs_m and also allow negative values.
+    TH1D temphist = tools::makeHisto("temp", tree, tree->GetEntries()/tools::LUMI, 0, cuts, "higgs_m", false);
     current = temphist.Integral();
     std::cout << current << "\t" << current*1./previous << "\t" << current*1./n_entries << std::endl;
     previous = current;
