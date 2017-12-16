@@ -1,8 +1,8 @@
 from ROOT import TFile, TTree
 import pickle
 
-rootpath = 'heppy.analyzers.examples.zh_had.TreeProducer.TreeProducer_1/tree.root' # output root file
-picklepath = 'heppy.analyzers.examples.zh_had.Selection.Selection_1/cut_flow.pck' # pickle file containing the cut flow
+rootpath = 'heppy.analyzers.examples.zh_fourjet.TreeProducer.TreeProducer_1/tree.root' # output root file
+picklepath = 'heppy.analyzers.examples.zh_fourjet.Selection.Selection_1/cut_flow.pck' # pickle file containing the cut flow
 
 def compare_event_count(path, verbose=False):
     rootfile = TFile('/'.join([path, rootpath]))
