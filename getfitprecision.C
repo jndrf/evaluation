@@ -83,9 +83,9 @@ void getfitprecision(TString indir="CMS_2T")
   //  TH1::SetDefaultSumw2();
 
   //make histograms
-  auto hist_bg = make_background_histo(tools::basepath+indir+"/WW_any_Chunk0/", tools::basepath+indir+"/ZZ_any_Chunk0/", tools::basepath+indir+"/Zgm_qq_Chunk0/");
+  auto hist_bg = make_background_histo(tools::basepath+indir+"/WW_any/", tools::basepath+indir+"/ZZ_any/", tools::basepath+indir+"/Zgm_qq/");
 
-  auto hist_signal = tools::makeHisto("signal", tools::basepath+indir+"/Higgsstrahlung_Chunk0/", 193, 0, tools::cutstring(2));
+  auto hist_signal = tools::makeHisto("signal", tools::basepath+indir+"/Higgsstrahlung/", 193, 0, tools::cutstring(2));
 
   TH1D hist_gesamt("gesamt", "", tools::NBINS, tools::LOWER, tools::UPPER);
   hist_gesamt.Add(&hist_bg);
