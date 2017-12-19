@@ -21,8 +21,8 @@ int FITHIGH = 149;
 
 // functions for the fits. 
 TF1 func_background("func_background", "pol3", FITLOW, FITHIGH);
-TF1 func_signal("func", "[0]*TMath::BreitWigner(x, [1], [2]) + [3]*TMath::Gaus(x, [4], [5])", FITLOW, FITHIGH);
-TF1 func_whole("func", "[0]*TMath::BreitWigner(x, [1], [2]) +[3]*TMath::Gaus(x, [4], [5]) + pol3(6)", FITLOW, FITHIGH);
+TF1 func_signal("func", "[0]*([1]*TMath::BreitWigner(x, [2], [3]) + [4]*TMath::Gaus(x, [5], [6]))", FITLOW, FITHIGH);
+TF1 func_whole("func", "[0]*([1]*TMath::BreitWigner(x, [2], [3]) +[4]*TMath::Gaus(x, [5], [6])) +[7]*( pol3(8))", FITLOW, FITHIGH);
 
 
 /*
@@ -73,19 +73,19 @@ TH1D smear_hist(TF1 fitfunc, int k)
  */
 double propagation_of_error(TF1 func, TFitResultPtr totalresult)           
 {                                                                               
-  auto submat = totalresult->GetCovarianceMatrix().GetSub(0, 5, 0, 5, "");
+  auto submat = totalresult->GetCovarianceMatrix().GetSub(0, 6, 0, 6, "");
   submat.Print();
   return func.IntegralError(tools::LOWER, tools::UPPER, nullptr, submat.GetMatrixArray(), .1);
 }
 
-void getfitprecision(TString indir="lep3tracker")
+void getfitprecision(TString indir="CMS_2T") 
 {
   //  TH1::SetDefaultSumw2();
 
   //make histograms
-  auto hist_bg = make_background_histo(tools::basepath+indir+"/WW_any/", tools::basepath+indir+"/ZZ_any/", tools::basepath+indir+"/Zgm_qq/");
+  auto hist_bg = make_background_histo(tools::basepath+indir+"/WW_any_Chunk0/", tools::basepath+indir+"/ZZ_any_Chunk0/", tools::basepath+indir+"/Zgm_qq_Chunk0/");
 
-  auto hist_signal = tools::makeHisto("signal", tools::basepath+indir+"/Higgsstrahlung/", 193, 0, tools::cutstring(2));
+  auto hist_signal = tools::makeHisto("signal", tools::basepath+indir+"/Higgsstrahlung_Chunk0/", 193, 0, tools::cutstring(2));
 
   TH1D hist_gesamt("gesamt", "", tools::NBINS, tools::LOWER, tools::UPPER);
   hist_gesamt.Add(&hist_bg);
@@ -94,16 +94,38 @@ void getfitprecision(TString indir="lep3tracker")
     hist_gesamt.SetBinError(i, TMath::Sqrt(hist_gesamt.GetBinContent(i)));
   }
 
+  // copy functions for smear use
+  TF1 sf_bg = func_background;
+  TF1 sf_total = func_whole;
+  
   //initial fit
   auto fit_bg = tools::fit_background(&hist_bg, func_background);
   TFitResultPtr fit_gesamt;
   TF1 func_gesamt;
-  std::tie(fit_gesamt, func_gesamt) = tools::fit_all(&hist_gesamt, fit_bg, func_whole);
+  // no scaling for initial fit
+  func_whole.FixParameter(0, 1);
+  func_whole.FixParameter(7, 1);
+  std::tie(fit_gesamt, func_gesamt) = tools::fit_all(&hist_gesamt, fit_bg, func_whole, false);
   //  fit_gesamt->GetCovarianceMatrix().Print();
   double error;
+  func_signal.SetParameter(0, 1);
   func_signal.SetParameters(func_gesamt.GetParameters());
   error = propagation_of_error(func_signal, fit_gesamt);
 
+  // now fix everything but the scaling (params 0 and 7)
+  for (int i =1; i<sf_total.GetNpar(); i++) {
+    if (i!=7) {
+      sf_total.FixParameter(i, func_gesamt.GetParameter(i));
+      std::cout << i << "\t" << func_gesamt.GetParameter(i) << std::endl;
+    }
+  }
+  sf_total.SetParameter(0, 1);
+  sf_total.SetParameter(7, 1);
+  // and for the signal
+  for (int i {1}; i<func_signal.GetNpar(); i++) {
+    func_signal.FixParameter(i, func_gesamt.GetParameter(i));
+  }
+  
   //Create Histograms to store every interesting variable
   TH1D result_mpv("mpv", "most probable value", 100, 122.5, 127.5);
   TH1D result_fwhm("fwhm", "fwhm", 400,0, 30);
@@ -111,14 +133,17 @@ void getfitprecision(TString indir="lep3tracker")
   TH1D result_yield("yield", "signal yield", 400, 6000, 12000);
 
   std::cout << "begin smearing" << std::endl;
+  std::cout << &fit_bg << std::endl << &sf_total << std::endl << &func_whole << std::endl;
   //smear and fit the histogram often (100k?), store the vars in the histos.
   int n_smears = 0;
-  for (int i=0; i<100000; i++) {
+  for (int i=0; i<3; i++) {
     TH1D temphist;
     TFitResultPtr tempfit;
     TF1 tempfunc;
-    temphist = smear_hist(func_gesamt, i);
-    std::tie(tempfit, tempfunc) = tools::fit_all(&temphist, fit_bg, func_whole);
+    temphist = smear_hist(sf_total, i);
+    std::cout << temphist.Integral() << std::endl;
+    std::tie(tempfit, tempfunc) = tools::fit_all(&temphist, fit_bg, sf_total);
+    std::cout << "moep" << std::endl;
     double chi2_dof = tempfunc.GetChisquare()/tempfunc.GetNDF();
     if (chi2_dof < .5 or chi2_dof > 1.5) continue;
     if (tempfit==0) {

@@ -35,7 +35,7 @@ namespace tools{
     //  TString b_not_neg = "hadjet1_tageff>=0 && hadjet2_tageff >=0 && hadjet3_tageff>=0 && hadjet4_tageff>=0"; //for legacy reasons. not required with newer analyses
   
 
-    TString retstring = notleptonic+"&&"+kinematics+"   && "+deltas;// + " && hadjet1_e>0" ;//+ b_not_neg;
+    TString retstring = "n_iso_leptons<=2 && " + notleptonic+"&&"+kinematics+"   && "+deltas;// + " && hadjet1_e>0" ;//+ b_not_neg;
 
     switch (recomode) {
     case 0: break;
@@ -158,15 +158,17 @@ namespace tools{
    * @param bgresult contains the results of the background fit.
    * @return The Pointer to the fit result and the whole fitted function.
    */
-  std::pair<TFitResultPtr, TF1> fit_all(TH1D* totalhist, TFitResultPtr bgresult, TF1 func)
+  std::pair<TFitResultPtr, TF1> fit_all(TH1D* totalhist, TFitResultPtr bgresult, TF1 func, bool setParams=true)
   {
     //double parameterlist[6] {280, 125, 6, 120, 125, 10};
-    func.SetParameters(280, 125, 6, 120, 125, 10, 1);
+    // if (setParams) {
+    //   func.SetParameters(1, 280, 125, 6, 120, 125, 10, 1, 10, 10, 10);
+    // }
     auto constants = bgresult->GetParams();
     for (int i=0; i < 4; i++) {
-      func.FixParameter(i+6, constants[i]);
+      func.FixParameter(i+8, constants[i]);
     }
-    TFitResultPtr ret = totalhist->Fit(&func, "RSNQ");//, FITLOW, FITHIGH);
+    TFitResultPtr ret = totalhist->Fit(&func, "RS");//, FITLOW, FITHIGH);
     //  ret->Print();
     return {ret, func};
   }
