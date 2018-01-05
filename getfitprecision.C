@@ -24,7 +24,6 @@ TF1 func_background("func_background", "pol3", FITLOW, FITHIGH);
 TF1 func_signal("func", "[0]*([1]*TMath::BreitWigner(x, [2], [3]) + [4]*TMath::Gaus(x, [5], [6]))", FITLOW, FITHIGH);
 TF1 func_whole("func", "[0]*([1]*TMath::BreitWigner(x, [2], [3]) +[4]*TMath::Gaus(x, [5], [6])) +[7]*( pol3(8))", FITLOW, FITHIGH);
 
-
 /*
  * create a histogram containing the sum of the backgrounds. 
  *Files are loaded from the path??/heppy.ana..../tree.root
@@ -103,6 +102,7 @@ void getfitprecision(TString indir="CMS_2T")
   TFitResultPtr fit_gesamt;
   TF1 func_gesamt;
   // no scaling for initial fit
+  func_whole.SetParameters(1, 700, 125, 8, -9, 1000, 7000);
   func_whole.FixParameter(0, 1);
   func_whole.FixParameter(7, 1);
   std::tie(fit_gesamt, func_gesamt) = tools::fit_all(&hist_gesamt, fit_bg, func_whole, false);
@@ -128,15 +128,15 @@ void getfitprecision(TString indir="CMS_2T")
   
   //Create Histograms to store every interesting variable
   TH1D result_mpv("mpv", "most probable value", 100, 122.5, 127.5);
-  TH1D result_fwhm("fwhm", "fwhm", 400,0, 30);
-  TH1D result_chi2_dof("chi2_dof", "#chi^{2}",200, 0, 3);
-  TH1D result_yield("yield", "signal yield", 400, 6000, 12000);
+  TH1D result_fwhm("fwhm", "fwhm", 400,0, 20);
+  TH1D result_chi2_dof("chi2_dof", "#chi^{2}",300, 0, 3);
+  TH1D result_yield("yield", "signal yield", 8000, 6000, 14000);
 
   std::cout << "begin smearing" << std::endl;
   std::cout << &fit_bg << std::endl << &sf_total << std::endl << &func_whole << std::endl;
   //smear and fit the histogram often (100k?), store the vars in the histos.
   int n_smears = 0;
-  for (int i=0; i<3; i++) {
+  for (int i=0; i<100000; i++) {
     TH1D temphist;
     TFitResultPtr tempfit;
     TF1 tempfunc;
