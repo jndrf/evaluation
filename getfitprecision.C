@@ -77,7 +77,7 @@ double propagation_of_error(TF1 func, TFitResultPtr totalresult)
   return func.IntegralError(tools::LOWER, tools::UPPER, nullptr, submat.GetMatrixArray(), .1);
 }
 
-void getfitprecision(TString indir="CMS_2T") 
+void getfitprecision(TString indir="CMS_default") 
 {
   //  TH1::SetDefaultSumw2();
 
@@ -141,9 +141,7 @@ void getfitprecision(TString indir="CMS_2T")
     TFitResultPtr tempfit;
     TF1 tempfunc;
     temphist = smear_hist(sf_total, i);
-    std::cout << temphist.Integral() << std::endl;
     std::tie(tempfit, tempfunc) = tools::fit_all(&temphist, fit_bg, sf_total);
-    std::cout << "moep" << std::endl;
     double chi2_dof = tempfunc.GetChisquare()/tempfunc.GetNDF();
     if (chi2_dof < .5 or chi2_dof > 1.5) continue;
     if (tempfit==0) {
@@ -152,7 +150,7 @@ void getfitprecision(TString indir="CMS_2T")
       result_mpv.Fill(tempfunc.GetMaximumX());
       result_fwhm.Fill(tools::get_fwhm(&tempfunc));
       result_chi2_dof.Fill(chi2_dof);//tempfunc.GetChisquare()/43);
-      result_yield.Fill(func_signal.Integral(tools::LOWER, tools::UPPER));
+      result_yield.Fill(func_signal.Integral(tools::LOWER, 149)); // last bin is empty by definition
     }
     if (i%10000==0) {
       std::cout << i << std::endl;
@@ -167,8 +165,8 @@ void getfitprecision(TString indir="CMS_2T")
   std::cout << "Chi^2/dof\t\t: " << result_chi2_dof.GetMean() << "\t +- " << result_chi2_dof.GetStdDev() << " rel. " << result_chi2_dof.GetStdDev()/result_chi2_dof.GetMean() << std::endl;
   std::cout << "Signal Yield\t\t: " << result_yield.GetMean() << "\t +- " << result_yield.GetStdDev() << " rel. " << result_yield.GetStdDev()/result_yield.GetMean() <<  std::endl;
   std::cout << "Error propagation\t \t\t" << error << std::endl;
-  std::cout << "error of sigyield error (rel.)\t" << result_yield.GetStdDevError()/result_yield.GetMean();
-  std::cout << "error of FWHM error (rel.)\t" << result_fwhm.GetStdDevError()/result_fwhm.GetMean();
+  std::cout << "error of sigyield error\t" << result_yield.GetStdDevError() << std::endl;
+  std::cout << "error of FWHM error\t" << result_fwhm.GetStdDevError() << std::endl;
 
   //draw the histograms. invoke root with the -b flag is they are not needed.
   hist_gesamt.DrawClone();

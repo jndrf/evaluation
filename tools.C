@@ -168,7 +168,7 @@ namespace tools{
     for (int i=0; i < 4; i++) {
       func.FixParameter(i+8, constants[i]);
     }
-    TFitResultPtr ret = totalhist->Fit(&func, "RS");//, FITLOW, FITHIGH);
+    TFitResultPtr ret = totalhist->Fit(&func, "RSNQ");//, FITLOW, FITHIGH);
     //  ret->Print();
     return {ret, func};
   }
