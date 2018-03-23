@@ -12,7 +12,7 @@ namespace tools{
   int NBINS = 50;
   float LOWER = 100.;    
   float UPPER = 150.;
-  double LUMI = 500.; //in fb
+  double LUMI = 5000.; //in fb
 
   /*
    * Returns the string with the appropriate cuts
