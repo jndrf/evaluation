@@ -102,7 +102,7 @@ void getfitprecision(TString indir="CMS_default")
   TFitResultPtr fit_gesamt;
   TF1 func_gesamt;
   // no scaling for initial fit
-  func_whole.SetParameters(1, 700, 125, 8, -9, 1000, 7000);
+  func_whole.SetParameters(1, 7000, 1250, 80, -90, 10000, 70000);
   func_whole.FixParameter(0, 1);
   func_whole.FixParameter(7, 1);
   std::tie(fit_gesamt, func_gesamt) = tools::fit_all(&hist_gesamt, fit_bg, func_whole, false);
@@ -130,7 +130,7 @@ void getfitprecision(TString indir="CMS_default")
   TH1D result_mpv("mpv", "most probable value", 100, 122.5, 127.5);
   TH1D result_fwhm("fwhm", "fwhm", 400,0, 20);
   TH1D result_chi2_dof("chi2_dof", "#chi^{2}",300, 0, 3);
-  TH1D result_yield("yield", "signal yield", 8000, 6000, 14000);
+  TH1D result_yield("yield", "signal yield", 80000, 60000, 140000);
 
   std::cout << "begin smearing" << std::endl;
   std::cout << &fit_bg << std::endl << &sf_total << std::endl << &func_whole << std::endl;

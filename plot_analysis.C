@@ -71,7 +71,7 @@ void plot_analysis(TString indir="tagger80/", std::string name="CMS")
   leg.AddEntry(&bgWW, "WW", "l");
   // Descriptionfield
   char buffer[1024];
-  std::snprintf(&buffer[0], 1024, "#scale[.67]{%s, 500 fb^{-1}, #sqrt{s} = 240 GeV}", name.c_str());
+  std::snprintf(&buffer[0], 1024, "#scale[.67]{%s, 5 ab^{-1}, #sqrt{s} = 240 GeV}", name.c_str());
   field.SetTitle(buffer);
   field.SetNDC();
   field.SetTextFont(leg.GetTextFont());
