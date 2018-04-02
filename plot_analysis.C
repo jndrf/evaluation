@@ -20,7 +20,7 @@ TF1 func_whole("func", "[0]*TMath::BreitWigner(x, [1], [2]) +[3]*TMath::Gaus(x, 
 
 
 
-void plot_analysis(TString indir="tagger80/", std::string name="CMS")
+void plot_analysis(TString indir="tagger80/", std::string name="CMS", std::string outfile="")
 {
   gStyle->SetOptStat(0);
   gStyle->SetLegendBorderSize(0);
@@ -99,5 +99,15 @@ void plot_analysis(TString indir="tagger80/", std::string name="CMS")
   std::cout << std::endl << tools::get_fwhm(&tempfunc);
   //  std::cout << leg.GetTextFont() << std::endl << leg.GetTextSize();
   //cv.Print("signalAndBkg_more_statistics_qqbar.svg");
+
+  if (outfile != "") {
+    TFile output(outfile.c_str(), "recreate");
+      output.cd();
+      bgZZ.Write("ZZ");
+      bgWW.Write("WW");
+      bgqqbar.Write("qqbar");
+      signal.Write("ZH");
+      output.Close();
+  }
   
 }
